@@ -1,6 +1,12 @@
 ﻿![vi-logo.svg](vi-logo.svg)
 # Unity Home Assignment
 
+## Assignment Need to know
+● You have 2 days to submit you work
+
+● The assignment should take 4 - 8 hours of work
+
+> Questions to: shahar@vi.co
 ## Set Up Project
 
 ● Download unity 2022.3.x lts
