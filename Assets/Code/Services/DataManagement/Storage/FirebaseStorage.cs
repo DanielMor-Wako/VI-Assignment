@@ -6,11 +6,12 @@ namespace Code.Services.DataManagement.Storage {
 
         public async Task<string> LoadAsync(string key) {
 
-            var tempString = "{\"objects\":[{\"key\":\"playerData\", {\"value\":\"playerData\"}]}";
+            string playerData = "{\"displayName\":\"Shalom\", \"level\":10}";
+            string tempString = "{\"objects\":[{\"key\":\"playerData\", \"value\":\"" + playerData.Replace("\"", "\\\"") + "\"}]}";
+
             return tempString;
             
             // Todo: Load from storage
-            var objectRecord = new ObjectRecord() { key = "playerData", value = "" };
         }
 
         public async Task SaveAsync(string data) {
