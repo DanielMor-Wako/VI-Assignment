@@ -1,16 +1,23 @@
-﻿using System.Threading.Tasks;
+﻿using Code.DataClasses;
+using System.Threading.Tasks;
 
 namespace Code.Services.DataManagement.Storage {
     public class FirebaseStorage : IStorage {
 
-        public Task<string> LoadAsync(string key) {
+        public async Task<string> LoadAsync(string key) {
+
+            var tempString = "{\"objects\":[{\"key\":\"playerData\", {\"value\":\"playerData\"}]}";
+            return tempString;
+            
             // Todo: Load from storage
-            return null;
+            var objectRecord = new ObjectRecord() { key = "playerData", value = "" };
         }
 
-        public Task SaveAsync(string key, string data) {
+        public async Task SaveAsync(string data) {
+
+            
             // Todo: Save to storage
-            return Task.CompletedTask;
         }
+
     }
 }
