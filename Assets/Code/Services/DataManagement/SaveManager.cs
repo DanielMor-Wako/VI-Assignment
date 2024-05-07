@@ -1,22 +1,27 @@
+using Code.Services.DataManagement.Serializers;
+using Code.Services.DataManagement.Storage;
 using System.Threading.Tasks;
 
-public class SaveManager {
+namespace Code.Services.DataManagement {
 
-    private IStorage _storage;
-    private ISerializer _serializer;
+    public class SaveManager {
 
-    public SaveManager(IStorage storage, ISerializer serialization) {
-        _storage = storage;
-        _serializer = serialization;
-    }
+        private IStorage _storage;
+        private ISerializer _serializer;
 
-    public async Task SaveAsync<T>(string key, T data) {
-        string serializedData = _serializer.Serialize(data);
-        await _storage.SaveAsync(key, serializedData);
-    }
+        public SaveManager(IStorage storage, ISerializer serialization) {
+            _storage = storage;
+            _serializer = serialization;
+        }
 
-    public async Task<T> LoadAsync<T>(string key) {
-        string serializedData = await _storage.LoadAsync(key);
-        return _serializer.Deserialize<T>(serializedData);
+        public async Task SaveAsync<T>(string key, T data) {
+            string serializedData = _serializer.Serialize(data);
+            await _storage.SaveAsync(key, serializedData);
+        }
+
+        public async Task<T> LoadAsync<T>(string key) {
+            string serializedData = await _storage.LoadAsync(key);
+            return _serializer.Deserialize<T>(serializedData);
+        }
     }
 }
