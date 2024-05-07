@@ -7,18 +7,21 @@ using Code.DataClasses;
 
 namespace Code.GameCore {
 
-    public class GameStateManager : MonoBehaviour {
+    public class GameStateManager {
 
-        // todo: create GameManager script that init the GameStateManager and determines the serializer and storage
-        private JsonSerializer _serializer;
+        private ISerializer _serializer;
+        private IStorage _storage;
+
         private SaveManager _saveManager;
         private GameObjectFactory _instanceFactory;
         private Dictionary<string, object> _serializedInstances;
 
-        private void Start() {
+        public GameStateManager(IStorage storage, ISerializer serialization) {
 
-            _serializer = new JsonSerializer();
-            _saveManager = new SaveManager(new FirebaseStorage(), _serializer);
+            _storage = storage;
+            _serializer = serialization;
+
+            _saveManager = new SaveManager(_storage, _serializer);
 
             _instanceFactory = new GameObjectFactory(_serializer);
 
@@ -30,6 +33,7 @@ namespace Code.GameCore {
             _serializedInstances = new Dictionary<string, object>();
             var gameState = await _saveManager.LoadAsync("gameState");
             foreach (var obj in gameState.objects) {
+                Debug.Log($"value for {obj.key} is {obj.value}");
                 var instance = _instanceFactory.Create(obj.key, obj.value);
                 // todo: maybe change the obj.key to uniqueIdentifier when object created
                 _serializedInstances.Add(obj.key, instance);
