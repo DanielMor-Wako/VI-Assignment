@@ -4,6 +4,7 @@ using Code.Services.DataManagement;
 using System.Collections.Generic;
 using UnityEngine;
 using Code.DataClasses;
+using System.Threading.Tasks;
 
 namespace Code.GameCore {
 
@@ -26,14 +27,35 @@ namespace Code.GameCore {
             _instanceFactory = new GameObjectFactory(_serializer);
         }
 
-        public async void LoadGameState() {
+        public Dictionary<string, object> GetSerializedInstances() => _serializedInstances;
+
+        public async Task SaveGameState() {
+
+            var newGameState = new GameStateData();
+            newGameState.objects = new();
+
+            foreach (var (kvp, vvp) in _serializedInstances) {
+
+                var serializeMethod = _serializer.GetType().GetMethod("Serialize").MakeGenericMethod(vvp.GetType());
+
+                string serializedData = (string)serializeMethod.Invoke(_serializer, new object[] { vvp });
+
+                newGameState.objects.Add(new ObjectRecord() { key = kvp, value = serializedData });
+            }
+
+
+            await _saveManager.SaveAsync(newGameState);
+        }
+
+        public async Task LoadGameState() {
 
             _serializedInstances = new Dictionary<string, object>();
             var gameState = await _saveManager.LoadAsync("gameState");
             foreach (var obj in gameState.objects) {
                 Debug.Log($"value for {obj.key} is {obj.value}");
-                var instance = _instanceFactory.Create(obj.key, obj.value);
+
                 // todo: maybe change the obj.key to uniqueIdentifier when object created
+                var instance = _instanceFactory.Create(obj.key, obj.value);
                 _serializedInstances.Add(obj.key, instance);
             }
 
@@ -49,24 +71,6 @@ namespace Code.GameCore {
                 }
                 Debug.Log($"Applied new state for : {obj.ToString()}");
             }
-        }
-
-        public async void SaveGameState() {
-
-            var newGameState = new GameStateData();
-            newGameState.objects = new();
-
-            foreach (var (kvp, vvp) in _serializedInstances) {
-
-                var serializeMethod = _serializer.GetType().GetMethod("Serialize").MakeGenericMethod(vvp.GetType());
-
-                string serializedData = (string) serializeMethod.Invoke(_serializer, new object[] { vvp });
-
-                newGameState.objects.Add(new ObjectRecord() { key = kvp, value = serializedData });
-            }
-
-
-            await _saveManager.SaveAsync(newGameState);
         }
 
     }

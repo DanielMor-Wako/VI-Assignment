@@ -9,19 +9,30 @@ namespace Code.GameCore {
 
         [SerializeField] private PrefabBank _prefabBank;
 
+        [Header("Game State Data")]
+        public string userId;
+
         private GameStateManager _gameStateManager;
 
-
         [ContextMenu("Load Game State")]
-        public void LoadGameState() {
+        public async void LoadGameState() {
 
-            _gameStateManager.LoadGameState();
+            await _gameStateManager.LoadGameState();
+
+            var instances = _gameStateManager.GetSerializedInstances();
+            if (instances == null ) {
+                Debug.LogWarning("Instances data could not be found");
+                return;
+            }
+
         }
 
         [ContextMenu("Save Game State")]
-        public void SaveGameState() {
+        public async void SaveGameState() {
 
-            _gameStateManager.SaveGameState();
+            await _gameStateManager.SaveGameState();
+
+            Debug.Log("Saved Game State");
         }
 
         private void Start() {
