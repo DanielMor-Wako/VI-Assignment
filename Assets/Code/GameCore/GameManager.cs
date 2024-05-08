@@ -44,7 +44,7 @@ namespace Code.GameCore {
 
             _gameStateManager = new GameStateManager(storage, serializer);
 
-            LoadGameState();
+            //LoadGameState();
         }
 
         private void GetPrefabBank() {
