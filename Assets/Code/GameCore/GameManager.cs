@@ -10,13 +10,26 @@ namespace Code.GameCore {
 
         private GameStateManager _gameStateManager;
 
-        private void Start() {
-
+        private void Start() 
+        {
             var serializer = new JsonSerializer();
             var storage = new FirebaseStorage();
 
             _gameStateManager = new GameStateManager(storage, serializer);
+
+            LoadGameState();
         }
 
+        [ContextMenu("Load Game State")]
+        public void LoadGameState()
+        {
+            _gameStateManager.LoadGameState();
+        }
+
+        [ContextMenu("Save Game State")]
+        public void SaveGameState()
+        {
+            _gameStateManager.SaveGameState();
+        }
     }
 }

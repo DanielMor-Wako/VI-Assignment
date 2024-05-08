@@ -24,11 +24,9 @@ namespace Code.GameCore {
             _saveManager = new SaveManager(_storage, _serializer);
 
             _instanceFactory = new GameObjectFactory(_serializer);
-
-            LoadGameState();
         }
 
-        private async void LoadGameState() {
+        public async void LoadGameState() {
 
             _serializedInstances = new Dictionary<string, object>();
             var gameState = await _saveManager.LoadAsync("gameState");
