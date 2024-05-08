@@ -9,6 +9,7 @@ namespace Code.GameCore {
 
     public class GameManager : MonoBehaviour {
 
+        [Header("Prefab Bank")]
         [SerializeField] private PrefabBank _prefabBank;
 
         [Header("Default UserId on start")]
@@ -22,9 +23,9 @@ namespace Code.GameCore {
         [ContextMenu("Load Game State")]
         public async void LoadGameState() {
 
-            _userId = _playerView.GetUserId();
+            var userId = GetUserIdOrDefault();
 
-            await _gameStateManager.LoadGameState(_userId);
+            await _gameStateManager.LoadGameState(userId);
 
             var instances = _gameStateManager.GetSerializedInstances();
             if (instances == null) {
@@ -34,7 +35,7 @@ namespace Code.GameCore {
 
             var playerData = instances["playerData"] as PlayerData;
 
-            _playerView.UpdateView(_userId, playerData);
+            _playerView.UpdateView(userId, playerData);
         }
 
         [ContextMenu("Save Game State")]
@@ -44,7 +45,7 @@ namespace Code.GameCore {
 
             instances["playerData"] = _playerView.CreatePlayerData();
 
-            await _gameStateManager.SaveGameState(_userId);
+            await _gameStateManager.SaveGameState(GetUserIdOrDefault());
         }
 
         private void Start() {
@@ -66,6 +67,17 @@ namespace Code.GameCore {
             if (_prefabBank == null) {
                 Debug.LogError("PrefabBank not found in Resources folder. Please check that the PrefabBank is located at Assets/Resources/PrefabBank/PrefabBank.asset");
             }
+        }
+
+        private string GetUserIdOrDefault() {
+
+            var userIdFromInputText = _playerView.GetUserId();
+
+            if (string.IsNullOrEmpty(userIdFromInputText)) {
+                userIdFromInputText = _userId;
+            }
+
+            return userIdFromInputText;
         }
     }
 }
