@@ -15,7 +15,7 @@ namespace Code.GameCore {
 
         private SaveManager _saveManager;
         private GameObjectFactory _instanceFactory;
-        private Dictionary<string, object> _serializedInstances;
+        private Dictionary<string, object> _serializedInstances = new();
 
         public GameStateManager(IStorage storage, ISerializer serialization) {
 
@@ -34,6 +34,9 @@ namespace Code.GameCore {
             var newGameState = new GameStateData();
             newGameState.objects = new();
 
+            _serializedInstances = new Dictionary<string, object>();
+            _serializedInstances.Add("playerData", new PlayerData() { displayName = "testuser", level = 0 });
+
             foreach (var (kvp, vvp) in _serializedInstances) {
 
                 var serializeMethod = _serializer.GetType().GetMethod("Serialize").MakeGenericMethod(vvp.GetType());
@@ -49,8 +52,13 @@ namespace Code.GameCore {
 
         public async Task LoadGameState() {
 
-            _serializedInstances = new Dictionary<string, object>();
+            _serializedInstances = new();
             var gameState = await _saveManager.LoadAsync("gameState");
+
+            if (gameState == null) {
+                return;
+            }
+
             foreach (var obj in gameState.objects) {
                 Debug.Log($"value for {obj.key} is {obj.value}");
 
