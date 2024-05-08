@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Code.DataClasses;
+using Code.GameCore.ObjectsView;
 using Firebase.Database;
 
 namespace Code.Services.DataManagement.Storage {
@@ -25,26 +27,20 @@ namespace Code.Services.DataManagement.Storage {
             });
 
             return result;
-
-            // Load from storage mock
-            string playerData = "{\"displayName\":\"Shalom\", \"level\":10}";
-            string tempString = "{\"objects\":[{\"key\":\"playerData\", \"value\":\"" + playerData.Replace("\"", "\\\"") + "\"}]}";
-            return tempString;
         }
 
         public async Task SaveAsync(string id, string data) {
 
-            // Save to storage
-            UnityEngine.Debug.Log("Started saving");
             await _dbReference.Child("users").Child(id).SetRawJsonValueAsync(data).ContinueWith(task => {
                 if (task.IsFaulted) {
+                    UnityEngine.Debug.LogError("Saving Failed");
                     return;
                 }
                 if (task.IsCompleted) {
+                    UnityEngine.Debug.Log("Saving Complete");
                     return;
                 }
             });
-            UnityEngine.Debug.Log("Saving complete");
         }
 
     }
