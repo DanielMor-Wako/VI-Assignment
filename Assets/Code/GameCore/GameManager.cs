@@ -1,4 +1,5 @@
-﻿using Code.ScriptableObjectData;
+﻿using Code.DataClasses;
+using Code.ScriptableObjectData;
 using Code.Services.DataManagement.Serializers;
 using Code.Services.DataManagement.Storage;
 using UnityEngine;
@@ -10,14 +11,15 @@ namespace Code.GameCore {
         [SerializeField] private PrefabBank _prefabBank;
 
         [Header("Game State Data")]
-        public string userId;
+        public string userId = "testuser";
+        public PlayerData playerData = new();
 
         private GameStateManager _gameStateManager;
 
         [ContextMenu("Load Game State")]
         public async void LoadGameState() {
 
-            await _gameStateManager.LoadGameState();
+            await _gameStateManager.LoadGameState(userId);
 
             var instances = _gameStateManager.GetSerializedInstances();
             if (instances == null ) {
@@ -25,12 +27,17 @@ namespace Code.GameCore {
                 return;
             }
 
+            playerData = instances["playerData"] as PlayerData;
         }
 
         [ContextMenu("Save Game State")]
         public async void SaveGameState() {
 
-            await _gameStateManager.SaveGameState();
+            var instances = _gameStateManager.GetSerializedInstances();
+
+            instances["playerData"] = playerData;
+
+            await _gameStateManager.SaveGameState(userId);
 
             Debug.Log("Saved Game State");
         }
@@ -43,8 +50,6 @@ namespace Code.GameCore {
             GetPrefabBank();
 
             _gameStateManager = new GameStateManager(storage, serializer);
-
-            //LoadGameState();
         }
 
         private void GetPrefabBank() {

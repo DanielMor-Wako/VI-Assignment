@@ -29,13 +29,10 @@ namespace Code.GameCore {
 
         public Dictionary<string, object> GetSerializedInstances() => _serializedInstances;
 
-        public async Task SaveGameState() {
+        public async Task SaveGameState(string userId) {
 
             var newGameState = new GameStateData();
             newGameState.objects = new();
-
-            _serializedInstances = new Dictionary<string, object>();
-            _serializedInstances.Add("playerData", new PlayerData() { displayName = "testuser", level = 0 });
 
             foreach (var (kvp, vvp) in _serializedInstances) {
 
@@ -47,13 +44,13 @@ namespace Code.GameCore {
             }
 
 
-            await _saveManager.SaveAsync(newGameState);
+            await _saveManager.SaveAsync(userId, newGameState);
         }
 
-        public async Task LoadGameState() {
+        public async Task LoadGameState(string userId) {
 
             _serializedInstances = new();
-            var gameState = await _saveManager.LoadAsync("gameState");
+            var gameState = await _saveManager.LoadAsync(userId, "gameState");
 
             if (gameState == null) {
                 return;
@@ -67,18 +64,6 @@ namespace Code.GameCore {
                 _serializedInstances.Add(obj.key, instance);
             }
 
-            ApplyGameState();
-        }
-
-        private void ApplyGameState() {
-
-            foreach (var (key, obj) in _serializedInstances) {
-                var go = obj as GameObject;
-                if (go == null) {
-                    continue;
-                }
-                Debug.Log($"Applied new state for : {obj.ToString()}");
-            }
         }
 
     }

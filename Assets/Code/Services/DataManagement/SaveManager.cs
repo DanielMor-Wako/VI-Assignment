@@ -15,13 +15,13 @@ namespace Code.Services.DataManagement {
             _serializer = serialization;
         }
 
-        public async Task SaveAsync(GameStateData data) {
+        public async Task SaveAsync(string userId, GameStateData data) {
             string serializedData = _serializer.Serialize(data);
-            await _storage.SaveAsync(serializedData);
+            await _storage.SaveAsync(userId, serializedData);
         }
 
-        public async Task<GameStateData> LoadAsync(string key) {
-            var serializedData = await _storage.LoadAsync(key);
+        public async Task<GameStateData> LoadAsync(string userId, string key) {
+            var serializedData = await _storage.LoadAsync(userId, key);
             return _serializer.Deserialize<GameStateData>(serializedData);
         }
     }

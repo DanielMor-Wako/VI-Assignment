@@ -10,11 +10,11 @@ namespace Code.Services.DataManagement.Storage {
             _dbReference = FirebaseDatabase.GetInstance("vi-assignment-default-rtdb.firebaseio.com").RootReference;
         }
 
-        public async Task<string> LoadAsync(string key) {
+        public async Task<string> LoadAsync(string id, string key) {
 
             var result = string.Empty;
 
-            await _dbReference.Child("users").Child("testuser").GetValueAsync().ContinueWith(task => {
+            await _dbReference.Child("users").Child(id).GetValueAsync().ContinueWith(task => {
                 if (task.IsFaulted) {
                     return;
                 }
@@ -32,11 +32,11 @@ namespace Code.Services.DataManagement.Storage {
             return tempString;
         }
 
-        public async Task SaveAsync(string data) {
+        public async Task SaveAsync(string id, string data) {
 
             // Save to storage
             UnityEngine.Debug.Log("Started saving");
-            await _dbReference.Child("users").Child("testuser").SetRawJsonValueAsync(data).ContinueWith(task => {
+            await _dbReference.Child("users").Child(id).SetRawJsonValueAsync(data).ContinueWith(task => {
                 if (task.IsFaulted) {
                     return;
                 }
