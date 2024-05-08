@@ -22,7 +22,7 @@ namespace Code.GameCore {
             await _gameStateManager.LoadGameState(userId);
 
             var instances = _gameStateManager.GetSerializedInstances();
-            if (instances == null ) {
+            if (instances == null) {
                 Debug.LogWarning("Instances data could not be found");
                 return;
             }
