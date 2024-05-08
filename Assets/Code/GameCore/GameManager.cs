@@ -11,21 +11,20 @@ namespace Code.GameCore {
 
         [SerializeField] private PrefabBank _prefabBank;
 
+        [Header("Default UserId on start")]
+        [SerializeField] private string _userId = "testuser1";
+
         [Header("View")]
         [SerializeField] private PlayerView _playerView;
-
-        [Header("Player Data")]
-        public string userId = "testuser";
-        public PlayerData playerData = new();
 
         private GameStateManager _gameStateManager;
 
         [ContextMenu("Load Game State")]
         public async void LoadGameState() {
 
-            userId = _playerView.GetUserId();
+            _userId = _playerView.GetUserId();
 
-            await _gameStateManager.LoadGameState(userId);
+            await _gameStateManager.LoadGameState(_userId);
 
             var instances = _gameStateManager.GetSerializedInstances();
             if (instances == null) {
@@ -33,9 +32,9 @@ namespace Code.GameCore {
                 return;
             }
 
-            playerData = instances["playerData"] as PlayerData;
+            var playerData = instances["playerData"] as PlayerData;
 
-            _playerView.UpdateView(userId, playerData);
+            _playerView.UpdateView(_userId, playerData);
         }
 
         [ContextMenu("Save Game State")]
@@ -45,7 +44,7 @@ namespace Code.GameCore {
 
             instances["playerData"] = _playerView.CreatePlayerData();
 
-            await _gameStateManager.SaveGameState(userId);
+            await _gameStateManager.SaveGameState(_userId);
         }
 
         private void Start() {
@@ -57,7 +56,7 @@ namespace Code.GameCore {
 
             _gameStateManager = new GameStateManager(storage, serializer);
 
-            _playerView.UpdateView(userId);
+            _playerView.UpdateView(_userId);
         }
 
         private void GetPrefabBank() {
