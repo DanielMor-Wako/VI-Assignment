@@ -23,6 +23,8 @@ namespace Code.GameCore {
         [ContextMenu("Load Game State")]
         public async void LoadGameState() {
 
+            userId = _playerView.GetUserId();
+
             await _gameStateManager.LoadGameState(userId);
 
             var instances = _gameStateManager.GetSerializedInstances();
@@ -41,7 +43,7 @@ namespace Code.GameCore {
 
             var instances = _gameStateManager.GetSerializedInstances();
 
-            instances["playerData"] = _playerView.GetPlayerData();
+            instances["playerData"] = _playerView.CreatePlayerData();
 
             await _gameStateManager.SaveGameState(userId);
         }
