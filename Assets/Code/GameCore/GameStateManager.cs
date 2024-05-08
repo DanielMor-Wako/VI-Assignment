@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Code.DataClasses;
 using System.Threading.Tasks;
+using Code.GameCore.Factories;
 
 namespace Code.GameCore {
 
@@ -57,9 +58,9 @@ namespace Code.GameCore {
             }
 
             foreach (var obj in gameState.objects) {
+
                 Debug.Log($"value for {obj.key} is {obj.value}");
 
-                // todo: maybe change the obj.key to uniqueIdentifier when object created
                 var instance = _instanceFactory.Create(obj.key, obj.value);
                 _serializedInstances.Add(obj.key, instance);
             }
