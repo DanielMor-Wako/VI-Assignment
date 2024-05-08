@@ -1,4 +1,5 @@
 ﻿using Code.DataClasses;
+using Code.GameCore.ObjectsView;
 using Code.ScriptableObjectData;
 using Code.Services.DataManagement.Serializers;
 using Code.Services.DataManagement.Storage;
@@ -10,7 +11,10 @@ namespace Code.GameCore {
 
         [SerializeField] private PrefabBank _prefabBank;
 
-        [Header("Game State Data")]
+        [Header("View")]
+        [SerializeField] private PlayerView _playerView;
+
+        [Header("Player Data")]
         public string userId = "testuser";
         public PlayerData playerData = new();
 
@@ -28,6 +32,8 @@ namespace Code.GameCore {
             }
 
             playerData = instances["playerData"] as PlayerData;
+
+            _playerView.UpdateView(userId, playerData);
         }
 
         [ContextMenu("Save Game State")]
@@ -35,11 +41,9 @@ namespace Code.GameCore {
 
             var instances = _gameStateManager.GetSerializedInstances();
 
-            instances["playerData"] = playerData;
+            instances["playerData"] = _playerView.GetPlayerData();
 
             await _gameStateManager.SaveGameState(userId);
-
-            Debug.Log("Saved Game State");
         }
 
         private void Start() {
@@ -50,6 +54,8 @@ namespace Code.GameCore {
             GetPrefabBank();
 
             _gameStateManager = new GameStateManager(storage, serializer);
+
+            _playerView.UpdateView(userId);
         }
 
         private void GetPrefabBank() {
