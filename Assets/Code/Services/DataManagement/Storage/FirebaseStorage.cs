@@ -1,6 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Code.DataClasses;
-using Code.GameCore.ObjectsView;
 using Firebase.Database;
 
 namespace Code.Services.DataManagement.Storage {
@@ -8,8 +6,10 @@ namespace Code.Services.DataManagement.Storage {
 
         private DatabaseReference _dbReference;
 
+        private const string UrlPath = "vi-assignment-default-rtdb.firebaseio.com";
+
         public FirebaseStorage() {
-            _dbReference = FirebaseDatabase.GetInstance("vi-assignment-default-rtdb.firebaseio.com").RootReference;
+            _dbReference = FirebaseDatabase.GetInstance(UrlPath).RootReference;
         }
 
         public async Task<string> LoadAsync(string id, string key) {
