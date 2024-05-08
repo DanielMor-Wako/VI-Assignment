@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81ec36c3da1910d45b45c009ed514314, type: 3}
   m_Name: PrefabBank
   m_EditorClassIdentifier: 
-  prefabList: []
+  prefabList:
+  - key: playerData
+    prefab: {fileID: 3391697198180372791, guid: 831380fa2a4f6b14da30470f518356c8, type: 3}
