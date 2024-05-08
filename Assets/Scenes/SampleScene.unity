@@ -636,7 +636,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prefabBank: {fileID: 11400000, guid: 11b7267e07093014cba58413e3886a57, type: 2}
-  userId: 
+  userId: testuser1
+  playerData:
+    displayName: 
+    level: 0
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
