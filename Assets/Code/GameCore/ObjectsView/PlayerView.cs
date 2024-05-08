@@ -8,15 +8,14 @@ namespace Code.GameCore.ObjectsView {
 
         [Header("Text Fields")]
         [SerializeField] private TMP_InputField _userIdInput;
-        [SerializeField] private TMP_Text _userIdText;
         [Space(10)]
         [SerializeField] private TMP_InputField _displayInput;
-        [SerializeField] private TMP_Text _displayText;
         [Space(10)]
         [SerializeField] private TMP_InputField _levelInput;
-        [SerializeField] private TMP_Text _levelText;
 
-        public PlayerData GetPlayerData() {
+        public string GetUserId() => _userIdInput.text;
+
+        public PlayerData CreatePlayerData() {
 
             return new PlayerData() {
                 displayName = _displayInput.text,
@@ -26,22 +25,22 @@ namespace Code.GameCore.ObjectsView {
 
         public void UpdateView(string userID, PlayerData data = null) {
 
-            UpdateTextField(_userIdText, userID);
+            UpdateTextField(_userIdInput, userID);
 
             var hasData = data != null;
 
-            UpdateTextField(_displayText, hasData ? data.displayName : "");
+            UpdateTextField(_displayInput, hasData ? data.displayName : "");
 
-            UpdateTextField(_levelText, hasData ? data.level.ToString() : "0");
+            UpdateTextField(_levelInput, hasData ? data.level.ToString() : "");
         }
 
-        private void UpdateTextField(TMP_Text text, string data) {
+        private void UpdateTextField(TMP_InputField text, string value) {
             
             if (text == null) {
                 return;
             }
 
-            text.SetText(data);
+            text.text = value;
         }
     }
 }
