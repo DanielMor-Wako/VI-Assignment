@@ -6,9 +6,10 @@ namespace Code.Services.DataManagement.Storage {
 
         private DatabaseReference _dbReference;
 
-        private const string UrlPath = "vi-assignment-default-rtdb.firebaseio.com";
+        private const string UrlPath = "https://vi-assignment-default-rtdb.firebaseio.com";
 
-        public FirebaseStorage() {
+        public FirebaseStorage()
+        {
             _dbReference = FirebaseDatabase.GetInstance(UrlPath).RootReference;
         }
 
