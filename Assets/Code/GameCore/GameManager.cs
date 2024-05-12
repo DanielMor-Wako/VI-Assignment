@@ -13,7 +13,7 @@ namespace Code.GameCore {
         [SerializeField] private PrefabBank _prefabBank;
 
         [Header("Default UserId on start")]
-        [SerializeField] private string _userId = "testuser1";
+        [SerializeField] private string _userId;
 
         [Header("View")]
         [SerializeField] private PlayerView _playerView;
@@ -74,6 +74,9 @@ namespace Code.GameCore {
             var userIdFromInputText = _playerView.GetUserId();
 
             if (string.IsNullOrEmpty(userIdFromInputText)) {
+
+                _userId = SystemInfo.deviceUniqueIdentifier;
+
                 userIdFromInputText = _userId;
             }
 
