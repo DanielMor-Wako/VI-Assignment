@@ -20,8 +20,8 @@ namespace Code.Services.DataManagement {
             await _storage.SaveAsync(groupId, userId, serializedData);
         }
 
-        public async Task<GameStateData> LoadAsync(string groupId, string userId, string key) {
-            var serializedData = await _storage.LoadAsync(groupId, userId, key);
+        public async Task<GameStateData> LoadAsync(string groupId, string userId) {
+            var serializedData = await _storage.LoadAsync(groupId, userId);
             return _serializer.Deserialize<GameStateData>(serializedData);
         }
     }

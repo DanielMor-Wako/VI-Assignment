@@ -52,7 +52,7 @@ namespace Code.GameCore {
         public async Task LoadGameState(string groupId, string userId) {
 
             _serializedInstances = new();
-            var gameState = await _saveManager.LoadAsync(groupId, userId, "gameState");
+            var gameState = await _saveManager.LoadAsync(groupId, userId);
 
             if (gameState == null || gameState.objects.Count == 0) {
                 return;

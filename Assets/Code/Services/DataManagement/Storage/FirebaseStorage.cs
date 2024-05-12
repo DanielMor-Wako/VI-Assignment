@@ -26,7 +26,7 @@ namespace Code.Services.DataManagement.Storage {
             });
         }
 
-        public async Task<string> LoadAsync(string groupid, string id, string key) {
+        public async Task<string> LoadAsync(string groupid, string id) {
 
             var result = string.Empty;
 
