@@ -53,7 +53,7 @@ namespace Code.GameCore {
             _serializedInstances = new();
             var gameState = await _saveManager.LoadAsync(userId, "gameState");
 
-            if (gameState == null) {
+            if (gameState == null || gameState.objects.Count == 0) {
                 return;
             }
 
