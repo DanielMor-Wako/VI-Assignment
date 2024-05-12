@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Firebase;
 using Firebase.Database;
 
 namespace Code.Services.DataManagement.Storage {
@@ -6,11 +7,23 @@ namespace Code.Services.DataManagement.Storage {
 
         private DatabaseReference _dbReference;
 
-        private const string UrlPath = "https://vi-assignment-default-rtdb.firebaseio.com";
-
         public FirebaseStorage()
         {
-            _dbReference = FirebaseDatabase.GetInstance(UrlPath).RootReference;
+            FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
+            {
+                try {
+                    if (task.Result == DependencyStatus.Available) {
+
+                        _dbReference = FirebaseDatabase.DefaultInstance.RootReference;
+                        // ("Firebase Realtime Database URL: " + _dbReference.DatabaseUrl.ToString());
+                    } else {
+                        // ("Could not resolve all Firebase dependencies: " + task.Result);
+                    }
+                }
+                catch (System.Exception ex) {
+                    throw new FirebaseException(0, "Error checking Firebase dependencies");
+                }
+            });
         }
 
         public async Task<string> LoadAsync(string id, string key) {
