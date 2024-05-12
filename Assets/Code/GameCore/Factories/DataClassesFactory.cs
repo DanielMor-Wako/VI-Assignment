@@ -7,28 +7,28 @@ namespace Code.GameCore.Factories {
 
     public class DataClassesFactory {
 
-        private static Dictionary<string, Type> _instanceCreationMethods;
+        private static Dictionary<string, Type> _registeredInstances;
         private ISerializer _serializer;
 
         public DataClassesFactory(ISerializer serialization) {
 
             _serializer = serialization;
 
-            _instanceCreationMethods = new Dictionary<string, Type>();
+            _registeredInstances = new Dictionary<string, Type>();
         }
 
-        public IEnumerable<string> GetRegisteredKeys() => _instanceCreationMethods.Keys;
+        public IEnumerable<string> GetRegisteredKeys() => _registeredInstances.Keys;
 
         public void Register(string key, Type type) {
 
-            _instanceCreationMethods[key] = type;
+            _registeredInstances[key] = type;
         }
 
         public object Create(string key, string data) {
 
-            if (_instanceCreationMethods.ContainsKey(key)) {
+            if (_registeredInstances.ContainsKey(key)) {
 
-                Type objectType = _instanceCreationMethods[key];
+                Type objectType = _registeredInstances[key];
 
                 MethodInfo deserializeMethod = _serializer.GetType().GetMethod("Deserialize").MakeGenericMethod(objectType);
                 object deserializedData = deserializeMethod.Invoke(_serializer, new object[] { data });
