@@ -25,7 +25,7 @@ namespace Code.GameCore {
 
             var userId = GetUserIdOrDefault();
 
-            await _gameStateManager.LoadGameState(userId);
+            await _gameStateManager.LoadGameState("users", userId);
 
             var instances = _gameStateManager.GetSerializedInstances();
             if (instances == null || instances.Count == 0) {
@@ -45,7 +45,7 @@ namespace Code.GameCore {
 
             instances["playerData"] = _playerView.CreatePlayerData();
 
-            await _gameStateManager.SaveGameState(GetUserIdOrDefault());
+            await _gameStateManager.SaveGameState("users", GetUserIdOrDefault());
         }
 
         private void Start() {

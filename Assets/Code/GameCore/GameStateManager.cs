@@ -21,19 +21,20 @@ namespace Code.GameCore {
         public GameStateManager(IStorage storage, ISerializer serialization) {
 
             _storage = storage;
+
             _serializer = serialization;
 
             _saveManager = new SaveManager(_storage, _serializer);
 
             _instanceFactory = new GameObjectFactory(_serializer);
+            _instanceFactory.Register("playerData", typeof(PlayerData));
         }
 
         public Dictionary<string, object> GetSerializedInstances() => _serializedInstances;
 
-        public async Task SaveGameState(string userId) {
+        public async Task SaveGameState(string groupId, string userId) {
 
             var newGameState = new GameStateData();
-            newGameState.objects = new();
 
             foreach (var (kvp, vvp) in _serializedInstances) {
 
@@ -45,13 +46,13 @@ namespace Code.GameCore {
             }
 
 
-            await _saveManager.SaveAsync(userId, newGameState);
+            await _saveManager.SaveAsync(groupId, userId, newGameState);
         }
 
-        public async Task LoadGameState(string userId) {
+        public async Task LoadGameState(string groupId, string userId) {
 
             _serializedInstances = new();
-            var gameState = await _saveManager.LoadAsync(userId, "gameState");
+            var gameState = await _saveManager.LoadAsync(groupId, userId, "gameState");
 
             if (gameState == null || gameState.objects.Count == 0) {
                 return;
@@ -62,6 +63,7 @@ namespace Code.GameCore {
                 Debug.Log($"value for {obj.key} is {obj.value}");
 
                 var instance = _instanceFactory.Create(obj.key, obj.value);
+
                 _serializedInstances.Add(obj.key, instance);
             }
 

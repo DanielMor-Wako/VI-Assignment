@@ -5,6 +5,6 @@ namespace Code.DataClasses {
 
     [Serializable]
     public class GameStateData {
-        public List<ObjectRecord> objects;
+        public List<ObjectRecord> objects = new();
     }
 }

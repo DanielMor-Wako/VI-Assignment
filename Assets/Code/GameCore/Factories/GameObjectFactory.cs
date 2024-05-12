@@ -14,17 +14,12 @@ namespace Code.GameCore.Factories {
         public GameObjectFactory(ISerializer serialization) {
 
             _serializer = serialization;
+
             _instanceCreationMethods = new Dictionary<string, Type>();
-            CreateDefaults();
         }
 
-        private void CreateDefaults() {
+        public void Register(string key, Type type) {
 
-            Register("playerData", typeof(PlayerData));
-            //Register("doorData", typeof(DoorData));
-        }
-
-        public static void Register(string key, Type type) {
             _instanceCreationMethods[key] = type;
         }
 

@@ -20,17 +20,17 @@ namespace Code.Services.DataManagement.Storage {
                         // ("Could not resolve all Firebase dependencies: " + task.Result);
                     }
                 }
-                catch (System.Exception ex) {
+                catch (System.Exception) {
                     throw new FirebaseException(0, "Error checking Firebase dependencies");
                 }
             });
         }
 
-        public async Task<string> LoadAsync(string id, string key) {
+        public async Task<string> LoadAsync(string groupid, string id, string key) {
 
             var result = string.Empty;
 
-            await _dbReference.Child("users").Child(id).GetValueAsync().ContinueWith(task => {
+            await _dbReference.Child(groupid).Child(id).GetValueAsync().ContinueWith(task => {
                 if (task.IsFaulted) {
                     return;
                 }
@@ -43,9 +43,9 @@ namespace Code.Services.DataManagement.Storage {
             return result;
         }
 
-        public async Task SaveAsync(string id, string data) {
+        public async Task SaveAsync(string groupid, string id, string data) {
 
-            await _dbReference.Child("users").Child(id).SetRawJsonValueAsync(data).ContinueWith(task => {
+            await _dbReference.Child(groupid).Child(id).SetRawJsonValueAsync(data).ContinueWith(task => {
                 if (task.IsFaulted) {
                     UnityEngine.Debug.LogError("Saving Failed");
                     return;
