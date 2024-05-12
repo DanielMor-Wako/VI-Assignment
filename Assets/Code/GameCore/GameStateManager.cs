@@ -15,7 +15,7 @@ namespace Code.GameCore {
         private IStorage _storage;
 
         private SaveManager _saveManager;
-        private GameObjectFactory _instanceFactory;
+        private DataClassesFactory _dataFactory;
         private Dictionary<string, object> _serializedInstances = new();
 
         public GameStateManager(IStorage storage, ISerializer serialization) {
@@ -26,8 +26,8 @@ namespace Code.GameCore {
 
             _saveManager = new SaveManager(_storage, _serializer);
 
-            _instanceFactory = new GameObjectFactory(_serializer);
-            _instanceFactory.Register("playerData", typeof(PlayerData));
+            _dataFactory = new DataClassesFactory(_serializer);
+            _dataFactory.Register("playerData", typeof(PlayerData));
         }
 
         public Dictionary<string, object> GetSerializedInstances() => _serializedInstances;
@@ -62,7 +62,7 @@ namespace Code.GameCore {
 
                 Debug.Log($"value for {obj.key} is {obj.value}");
 
-                var instance = _instanceFactory.Create(obj.key, obj.value);
+                var instance = _dataFactory.Create(obj.key, obj.value);
 
                 _serializedInstances.Add(obj.key, instance);
             }

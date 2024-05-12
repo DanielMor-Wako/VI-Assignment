@@ -1,4 +1,3 @@
-using Code.DataClasses;
 using Code.Services.DataManagement.Serializers;
 using System;
 using System.Collections.Generic;
@@ -6,17 +5,19 @@ using System.Reflection;
 
 namespace Code.GameCore.Factories {
 
-    public class GameObjectFactory {
+    public class DataClassesFactory {
 
         private static Dictionary<string, Type> _instanceCreationMethods;
         private ISerializer _serializer;
 
-        public GameObjectFactory(ISerializer serialization) {
+        public DataClassesFactory(ISerializer serialization) {
 
             _serializer = serialization;
 
             _instanceCreationMethods = new Dictionary<string, Type>();
         }
+
+        public IEnumerable<string> GetRegisteredKeys() => _instanceCreationMethods.Keys;
 
         public void Register(string key, Type type) {
 
@@ -40,8 +41,5 @@ namespace Code.GameCore.Factories {
 
         }
 
-        public IEnumerable<string> GetRegisteredKeys() {
-            return _instanceCreationMethods.Keys;
-        }
     }
 }
